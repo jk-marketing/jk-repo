@@ -504,7 +504,7 @@ function showCustomAlert(message) {
   }, 3000); // alert hides after 3 seconds
 }
 function triggerTrackingPixel() {
-  const visitorId = generateUUID(); // or generateUUID()
+  const visitorId = localStorage.getItem("propeller_clickid"); // or generateUUID()
   const pixel = new Image();
   pixel.src = `http://ad.propellerads.com/conversion.php?aid=3813520&tid=143216&visitor_id=${visitorId}&payout=1`;
 }
@@ -546,6 +546,20 @@ function updateProgressBar(progress) {
 }
 updateProgressBar("0");
 updateProgressText("0");
+
+(function () {
+  function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  const clickid = getQueryParam("clickid");
+  if (clickid && clickid.length >= 10) {
+    // Save to localStorage
+    localStorage.setItem("propeller_clickid", clickid);
+    console.log("ClickID stored:", clickid);
+  }
+})();
 
 // document.getElementById("next_btn_1").addEventListener("click", () => {
 //   updateProgressBar("33");
