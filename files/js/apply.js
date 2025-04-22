@@ -28,7 +28,7 @@
 // const accountNumber="";
 // const accountType="";
 const data = {
-  // bG9hbkFtb3VudA: "", // loanAmount
+  bG9hbkFtb3VudA: "", // loanAmount
   ZW1haWw: "", // email
   cGhvbmU: "", // phone
   // bGFzdDRzc24: "", // last4ssn
@@ -75,14 +75,14 @@ if (params.has("zip")) {
   document.getElementById("id_field_zip").value = params.get("zip");
 }
 
-// // Script 1: Update displaySpan based on select change
-// const select = document.getElementById("id_field_requested_amount");
-// const displaySpan = document.querySelector(".kWGRmg");
+// Script 1: Update displaySpan based on select change
+const select = document.getElementById("id_field_requested_amount");
+const displaySpan = document.querySelector(".kWGRmg");
 
-// select.addEventListener("change", () => {
-//   displaySpan.textContent = select.options[select.selectedIndex].text;
-//   data.bG9hbkFtb3VudA = select.value;
-// });
+select.addEventListener("change", () => {
+  displaySpan.textContent = select.options[select.selectedIndex].text;
+  data.bG9hbkFtb3VudA = select.value;
+});
 // Script 1: Update displaySpan based on select change
 const stateSelect = document.getElementById("id_field_state");
 const stateDisplaySpan = document.querySelector(".kWGRmgS");
@@ -397,11 +397,13 @@ function validateForm() {
   const address = document.getElementById("id_field_address").value.trim();
   const state = document.getElementById("id_field_state").value.trim();
   const city = document.getElementById("id_field_city").value.trim();
-
+  const loanAmount = document
+    .getElementById("id_field_requested_amount")
+    .value.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   let validCount = 0;
-  const totalFields = 8;
+  const totalFields = 9;
 
   if (emailRegex.test(email)) validCount++;
   if (phone.length === 10) validCount++;
@@ -411,8 +413,9 @@ function validateForm() {
   if (address) validCount++;
   if (state) validCount++;
   if (city) validCount++;
+  if (loanAmount) validCount++;
 
-  const progress = (validCount / totalFields) * 100;
+  const progress = ((validCount / 9) * 100).toFixed(2);
   // document.getElementById("progressBar").style.width = `${progress}%`;
   updateProgressBar(progress);
   updateProgressText(progress);
@@ -437,6 +440,9 @@ document.getElementById("next_btn_3").addEventListener("click", () => {
     data.c3RyZWV0QWRkcmVzcw = document.getElementById("id_field_address").value;
     data.c3RhdGU = document.getElementById("id_field_state").value;
     data.Y2l0eQ = document.getElementById("id_field_city").value;
+    data.bG9hbkFtb3VudA = document.getElementById(
+      "id_field_requested_amount"
+    ).value;
     if (
       !data.ZW1haWw ||
       !data.cGhvbmU ||
@@ -445,7 +451,8 @@ document.getElementById("next_btn_3").addEventListener("click", () => {
       !data.emlwY29kZQ ||
       !data.c3RyZWV0QWRkcmVzcw ||
       !data.c3RhdGU ||
-      !data.Y2l0eQ
+      !data.Y2l0eQ ||
+      !data.bG9hbkFtb3VudA
     ) {
       alert("Please fill in all fields.");
       return;
@@ -466,7 +473,7 @@ document.getElementById("next_btn_3").addEventListener("click", () => {
     }
 
     fetch(
-      "https://script.google.com/macros/s/AKfycbzbJbdAnlVBMOjcI4-TeMKI4FXHmtFgXyzuq3aycYwmmW32sBV-R-kB9j6ONWc0D0c1/exec",
+      "https://script.google.com/macros/s/AKfycbwuiR2alMqa7mfL6YBilP73AG6HmWfMT9ycMcEVWps65x4_J2yVmFYd0jJFp4suuEUP/exec",
       {
         method: "POST",
         mode: "no-cors", // use "cors" if your app script is set up for it
