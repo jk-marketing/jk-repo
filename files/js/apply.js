@@ -28,17 +28,19 @@
 // const accountNumber="";
 // const accountType="";
 const data = {
-  bG9hbkFtb3VudA: "", // loanAmount
-  ZW1haWw: "", // email
-  cGhvbmU: "", // phone
+  requestedAmount: "", // loanAmount
+  city: "", // email
+  state: "", // phone
   // bGFzdDRzc24: "", // last4ssn
-  Zmlyc3ROYW1l: "", // firstName
-  bGFzdE5hbWU: "", // lastName
+  address: "", // firstName
+  zipcode: "", // lastName
   // YmlydGhEYXRl: "", // birthDate
-  emlwY29kZQ: "", // zipcode
-  c3RyZWV0QWRkcmVzcw: "", // streetAddress
-  c3RhdGU: "", // state
-  Y2l0eQ: "", // city
+  lastName: "", // zipcode
+  firstName: "", // streetAddress
+  phone: "", // state
+  email: "", // city
+  visitorId:"",
+  id: "0"
   // dGltZU9mUmVzaWRlbmNl: "", // timeOfResidence
   // b3duZXJPclJlbnRlZA: "", // ownerOrRented
   // c291cmNlT2ZJbmNvbWU: "", // sourceOfIncome
@@ -81,7 +83,7 @@ const displaySpan = document.querySelector(".kWGRmg");
 
 select.addEventListener("change", () => {
   displaySpan.textContent = select.options[select.selectedIndex].text;
-  data.bG9hbkFtb3VudA = select.value;
+  data.requestedAmount = select.value;
 });
 // Script 1: Update displaySpan based on select change
 const stateSelect = document.getElementById("id_field_state");
@@ -92,7 +94,7 @@ stateSelect.addEventListener("change", () => {
   stateDisplaySpan.textContent = selectedOption;
   const stateContainer = document.getElementById("state-field-container");
   stateContainer.classList.add("B0A4Qg");
-  data.c3RhdGU = selectedOption;
+  data.state = selectedOption;
 });
 
 // const timeOfResidenceSelect = document.getElementById(
@@ -178,7 +180,7 @@ const emailWrapper = emailInput.closest(".S1KhMM");
 emailInput.addEventListener("input", () => {
   const value = emailInput.value.trim();
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  data.ZW1haWw = value;
+  data.email = value;
 
   if (value !== "" && isValidEmail) {
     emailWrapper.classList.add("B0A4Qg");
@@ -200,7 +202,7 @@ phoneInput.addEventListener("input", (e) => {
   if (value.length >= 7) formatted += "-" + value.substring(6, 10);
 
   e.target.value = formatted;
-  data.cGhvbmU = value;
+  data.phone = value;
 
   if (value.length === 10) {
     phoneWrapper.classList.add("B0A4Qg");
@@ -268,7 +270,7 @@ const firstNameInput = document.getElementById("id_field_first_name");
 const parentDiv = document.getElementById("firstname-field-container");
 
 function validateInput() {
-  data.Zmlyc3ROYW1l = firstNameInput.value;
+  data.firstName = firstNameInput.value;
   if (firstNameInput.value.trim() !== "") {
     parentDiv.classList.add("B0A4Qg");
   } else {
@@ -286,7 +288,7 @@ const parentDivLastName = document.getElementById("lastname-field-container");
 function validateInputLastName() {
   if (lastNameInput.value.trim() !== "") {
     parentDivLastName.classList.add("B0A4Qg");
-    data.bGFzdE5hbWU = lastNameInput.value;
+    data.lastName = lastNameInput.value;
   } else {
     parentDivLastName.classList.remove("B0A4Qg");
   }
@@ -299,9 +301,9 @@ const cityInput = document.getElementById("id_field_city");
 const cityInputContainer = document.getElementById("city-field-container");
 
 function validateCity() {
-  if (lastNameInput.value.trim() !== "") {
+  if (cityInput.value.trim() !== "") {
     cityInputContainer.classList.add("B0A4Qg");
-    data.bGFzdE5hbWU = lastNameInput.value;
+    data.city = cityInput.value;
   } else {
     cityInputContainer.classList.remove("B0A4Qg");
   }
@@ -349,7 +351,7 @@ const zipPattern = /^\d{5}(-\d{4})?$/;
 function validateZipCode() {
   if (zipPattern.test(zipCodeInput.value.trim())) {
     parentDivZip.classList.add("B0A4Qg");
-    data.emlwY29kZQ = zipCodeInput.value;
+    data.zip = zipCodeInput.value;
     parentDivZip.classList.remove("invalid");
   } else {
     parentDivZip.classList.remove("B0A4Qg");
@@ -432,27 +434,28 @@ document.getElementById("next_btn_3").addEventListener("click", () => {
   // page4.classList.remove("hidden");
   //   page1.classList.add("hidden");
   if (validateForm()) {
-    data.ZW1haWw = document.getElementById("id_field_email").value;
-    data.cGhvbmU = document.getElementById("id_field_home_phone").value;
-    data.Zmlyc3ROYW1l = document.getElementById("id_field_first_name").value;
-    data.bGFzdE5hbWU = document.getElementById("id_field_last_name").value;
-    data.emlwY29kZQ = document.getElementById("id_field_zip").value;
-    data.c3RyZWV0QWRkcmVzcw = document.getElementById("id_field_address").value;
-    data.c3RhdGU = document.getElementById("id_field_state").value;
-    data.Y2l0eQ = document.getElementById("id_field_city").value;
-    data.bG9hbkFtb3VudA = document.getElementById(
+    data.email = document.getElementById("id_field_email").value;
+    data.phone = document.getElementById("id_field_home_phone").value;
+    data.firstName = document.getElementById("id_field_first_name").value;
+    data.lastName = document.getElementById("id_field_last_name").value;
+    data.zipcode = document.getElementById("id_field_zip").value;
+    data.address = document.getElementById("id_field_address").value;
+    data.state = document.getElementById("id_field_state").value;
+    data.city = document.getElementById("id_field_city").value;
+    data.requestedAmount = document.getElementById(
       "id_field_requested_amount"
     ).value;
+    data.visitorId = localStorage.getItem("propeller_clickid"); // or generateUUID()
     if (
-      !data.ZW1haWw ||
-      !data.cGhvbmU ||
-      !data.Zmlyc3ROYW1l ||
-      !data.bGFzdE5hbWU ||
-      !data.emlwY29kZQ ||
-      !data.c3RyZWV0QWRkcmVzcw ||
-      !data.c3RhdGU ||
-      !data.Y2l0eQ ||
-      !data.bG9hbkFtb3VudA
+      !data.email ||
+      !data.phone ||
+      !data.firstName ||
+      !data.lastName ||
+      !data.zipcode ||
+      !data.address ||
+      !data.city ||
+      !data.state ||
+      !data.requestedAmount
     ) {
       alert("Please fill in all fields.");
       return;
@@ -460,11 +463,11 @@ document.getElementById("next_btn_3").addEventListener("click", () => {
 
     // ✅ Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.ZW1haWw)) {
+    if (!emailRegex.test(data.email)) {
       alert("Please enter a valid email address.");
       return;
     }
-    const phoneNumber = data.cGhvbmU.replace(/\D/g, ""); // keep only digits
+    const phoneNumber = data.phone.replace(/\D/g, ""); // keep only digits
 
     // ✅ Phone number should be 10 digits
     if (phoneNumber.length !== 10) {
@@ -473,10 +476,9 @@ document.getElementById("next_btn_3").addEventListener("click", () => {
     }
 
     fetch(
-      "https://script.google.com/macros/s/AKfycbwuiR2alMqa7mfL6YBilP73AG6HmWfMT9ycMcEVWps65x4_J2yVmFYd0jJFp4suuEUP/exec",
+      "https://localhost:7157/User",
       {
         method: "POST",
-        mode: "no-cors", // use "cors" if your app script is set up for it
         headers: {
           "Content-Type": "application/json",
         },
@@ -525,17 +527,17 @@ function generateUUID() {
 }
 
 function redirectPage() {
-  triggerTrackingPixel(); // Call the tracking pixel function
-  const phoneNumber = data.cGhvbmU.replace(/\D/g, ""); // keep only digits
+  // triggerTrackingPixel(); // Call the tracking pixel function
+  const phoneNumber = data.phone.replace(/\D/g, ""); // keep only digits
 
   const redirectUrl = `https://fundsjoy.com/apply?manual=1&aid=2992&email=${
-    data.ZW1haWw
-  }&first_name=${data.Zmlyc3ROYW1l}&last_name=${data.bGFzdE5hbWU}&zip=${
-    data.emlwY29kZQ
-  }&state=${encodeURIComponent(data.c3RhdGU)}&city=${encodeURIComponent(
-    data.Y2l0eQ
+    data.email
+  }&first_name=${data.firstName}&last_name=${data.lastName}&zip=${
+    data.zipcode
+  }&state=${encodeURIComponent(data.state)}&city=${encodeURIComponent(
+    data.city
   )}&address=${encodeURIComponent(
-    data.c3RyZWV0QWRkcmVzcw
+    data.address
   )}&home_phone=${phoneNumber}`;
 
   // Redirect to the constructed URL
